@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  web.api:
+    image: ${DOCKER_REGISTRY-}webapi
+    build:
+      context: .
+      dockerfile: Web.API/Dockerfile
+    ports:
+      - 5000:80 # port mapping
+      - 5001:443
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development # debug runs in development mode
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password={pass123} # password used when making the cert, without curly braces
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+      - ~/.aspnet/https:/https:ro
+
+  db: # this is used as the host in your connection string 
+    image: postgres
+    container_name: 'postgres_container'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=XDfpgvtR3t4i5Bus0OjI
+      - POSTGRES_DB=railway
+    volumes:
+      - pgdata:/var/lib/postgresql/data # this is where your data persists in the container
+    ports:
+      - 7817:7817 # use this port in your connection string
+
+volumes:
+  pgdata:
