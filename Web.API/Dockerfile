@@ -22,5 +22,5 @@ RUN dotnet publish "Web.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:U
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "Web.API.dll"]

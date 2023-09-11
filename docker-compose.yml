@@ -5,7 +5,7 @@ services:
     image: ${DOCKER_REGISTRY-}webapi
     build:
       context: .
-      dockerfile: Web.API/.docker/Dockerfile
+      dockerfile: Web.API/Dockerfile
     ports:
       - 5000:80 # port mapping
       - 5001:443
